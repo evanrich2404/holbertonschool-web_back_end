@@ -1,4 +1,9 @@
-export default function cleanSet(set, array) {
-  array.forEach((value) => set.delete(value));
-  return set;
+export default function cleanSet(set, startString) {
+  const result = [];
+  set.forEach((value) => {
+    if (value.startsWith(startString)) {
+      result.push(value.slice(startString.length));
+    }
+  });
+  return result.join('-');
 }
