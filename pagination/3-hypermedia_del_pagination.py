@@ -2,9 +2,9 @@
 """
 Deletion-resilient hypermedia pagination
 """
-
 import csv
 from typing import List, Dict, Tuple
+
 
 class Server:
     """Server class to paginate a database of popular baby names.
@@ -40,11 +40,11 @@ class Server:
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """Returns a dictionary containing the required key-value pairs."""
         assert index is not None and 0 <= index < len(self.dataset())
-        
+
         indexed_data = self.indexed_dataset()
         keys = list(indexed_data.keys())
         data = []
-        
+
         for key in keys:
             if key >= index:
                 data.append(indexed_data[key])
