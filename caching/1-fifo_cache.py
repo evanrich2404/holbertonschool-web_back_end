@@ -2,7 +2,6 @@
 """Creating a FIFO caching system that inherits from BasicCache"""
 from collections import deque
 BasicCache = __import__('0-basic_cache').BasicCache
-from base_caching import BaseCaching
 
 
 class FIFOCache(BasicCache):
