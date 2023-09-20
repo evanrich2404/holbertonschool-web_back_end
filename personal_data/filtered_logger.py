@@ -58,3 +58,24 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
         database=os.environ.get('PERSONAL_DATA_DB_NAME'))
     return connector
+
+
+def main() -> None:
+    """takes no arguments and returns nothing"""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+    
+    for row in cursor:
+        row_dict = dict(zip(cursor.column_names, row))
+        log_msg = "; ".join([f"{key}={value}"
+                             for key, value in row_dict.items()])
+        logger.info(log_msg)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
