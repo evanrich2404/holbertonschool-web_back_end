@@ -23,7 +23,7 @@ def before_request_func():
     """ Before request handler
     """
     paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/',
-             '/api/v1/status',]
+             '/api/v1/status']
 
     if auth is None:
         return
