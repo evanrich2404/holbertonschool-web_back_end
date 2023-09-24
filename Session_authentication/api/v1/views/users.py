@@ -10,7 +10,7 @@ from models.user import User
 def view_all_users() -> str:
     """ GET /api/v1/users
     Return:
-      - list of all User objects JSON represented
+    - list of all User objects JSON represented
     """
     all_users = [user.to_json() for user in User.all()]
     return jsonify(all_users)
@@ -20,14 +20,23 @@ def view_all_users() -> str:
 def view_one_user(user_id: str = None) -> str:
     """ GET /api/v1/users/:id
     Path parameter:
-      - User ID
+    - User ID
     Return:
-      - User object JSON represented
-      - 404 if the User ID doesn't exist
+    - User object JSON represented
+    - 404 if the User ID doesn't exist
     """
+
+    if user_id == 'me':
+        if request.current_user is None:
+            abort(404)
+
+        if request.current_user is not None:
+            return jsonify(request.current_user.to_json())
+
     if user_id is None:
         abort(404)
     user = User.get(user_id)
+
     if user is None:
         abort(404)
     return jsonify(user.to_json())
@@ -37,17 +46,20 @@ def view_one_user(user_id: str = None) -> str:
 def delete_user(user_id: str = None) -> str:
     """ DELETE /api/v1/users/:id
     Path parameter:
-      - User ID
+    - User ID
     Return:
-      - empty JSON is the User has been correctly deleted
-      - 404 if the User ID doesn't exist
+    - empty JSON is the User has been correctly deleted
+    - 404 if the User ID doesn't exist
     """
+
     if user_id is None:
         abort(404)
     user = User.get(user_id)
+
     if user is None:
         abort(404)
     user.remove()
+
     return jsonify({}), 200
 
 
@@ -55,22 +67,21 @@ def delete_user(user_id: str = None) -> str:
 def create_user() -> str:
     """ POST /api/v1/users/
     JSON body:
-      - email
-      - password
-      - last_name (optional)
-      - first_name (optional)
+    - email
+    - password
+    - last_name (optional)
+    - first_name (optional)
     Return:
-      - User object JSON represented
-      - 400 if can't create the new User
+    - User object JSON represented
+    - 400 if can't create the new User
     """
+
     rj = None
-    error_msg = None
     try:
         rj = request.get_json()
     except Exception as e:
         rj = None
-    if rj is None:
-        error_msg = "Wrong format"
+    error_msg = "Wrong format" if rj is None else None
     if error_msg is None and rj.get("email", "") == "":
         error_msg = "email missing"
     if error_msg is None and rj.get("password", "") == "":
@@ -85,7 +96,7 @@ def create_user() -> str:
             user.save()
             return jsonify(user.to_json()), 201
         except Exception as e:
-            error_msg = "Can't create User: {}".format(e)
+            error_msg = f"Can't create User: {e}"
     return jsonify({'error': error_msg}), 400
 
 
@@ -93,29 +104,36 @@ def create_user() -> str:
 def update_user(user_id: str = None) -> str:
     """ PUT /api/v1/users/:id
     Path parameter:
-      - User ID
+    - User ID
     JSON body:
-      - last_name (optional)
-      - first_name (optional)
+    - last_name (optional)
+    - first_name (optional)
     Return:
-      - User object JSON represented
-      - 404 if the User ID doesn't exist
-      - 400 if can't update the User
+    - User object JSON represented
+    - 404 if the User ID doesn't exist
+    - 400 if can't update the User
     """
+
     if user_id is None:
         abort(404)
     user = User.get(user_id)
+
     if user is None:
         abort(404)
+
     rj = None
+
     try:
         rj = request.get_json()
     except Exception as e:
         rj = None
+
     if rj is None:
         return jsonify({'error': "Wrong format"}), 400
+
     if rj.get('first_name') is not None:
         user.first_name = rj.get('first_name')
+
     if rj.get('last_name') is not None:
         user.last_name = rj.get('last_name')
     user.save()
