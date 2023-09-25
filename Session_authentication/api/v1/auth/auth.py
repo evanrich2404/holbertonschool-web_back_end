@@ -10,13 +10,11 @@ class Auth:
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Method for validating if the path requires authentication"""
-        if path is None or excluded_paths is None or excluded_paths == []:
+        if path is None or excluded_paths is None or not excluded_paths:
             return True
         if path[-1] != '/':
             path += '/'
-        if path in excluded_paths:
-            return False
-        return True
+        return path not in excluded_paths
 
     def authorization_header(self, request=None) -> str:
         """
@@ -31,3 +29,14 @@ class Auth:
         Method for getting the current user
         """
         return None
+
+    def session_cookie(self, request=None):
+        """
+        Method for getting a cookie value from a request
+        """
+        if request is None:
+            return None
+
+        _my_session_id = getenv('SESSION_NAME')
+
+        return request.cookies.get(_my_session_id)
