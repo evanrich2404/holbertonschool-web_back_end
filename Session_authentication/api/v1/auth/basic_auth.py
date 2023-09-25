@@ -15,9 +15,10 @@ class BasicAuth(Auth):
             return None
         if type(authorization_header) is not str:
             return None
-        if authorization_header[:6] != "Basic ":
+        if authorization_header.startswith("Basic "):
+            return authorization_header[6:]
+        else:
             return None
-        return authorization_header[6:]
 
     def decode_base64_authorization_header(
             self, base64_authorization_header: str) -> str:
@@ -28,8 +29,7 @@ class BasicAuth(Auth):
             return None
         try:
             decoded_bytes = base64.b64decode(base64_authorization_header)
-            decoded_str = decoded_bytes.decode('utf-8')
-            return decoded_str
+            return decoded_bytes.decode('utf-8')
         except Exception:
             return None
 
@@ -84,5 +84,4 @@ class BasicAuth(Auth):
         user_email = user_credentials[0]
         user_pwd = user_credentials[1]
 
-        user = self.user_object_from_credentials(user_email, user_pwd)
-        return user
+        return self.user_object_from_credentials(user_email, user_pwd)
