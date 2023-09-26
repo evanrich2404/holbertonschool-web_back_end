@@ -9,7 +9,7 @@ Base = declarative_base()
 class User(Base):
     """User class for database table users"""
     __tablename__ = 'users'
-    
+
     id = Column(Integer, primary_key=True)
     email = Column(String(250), nullable=False, unique=True)
     hashed_password = Column(String(250), nullable=False)
