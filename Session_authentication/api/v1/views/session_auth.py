@@ -6,9 +6,10 @@ from os import getenv
 from api.v1.views import app_views
 
 
-@app_views.route('/login', methods=['POST'], strict_slashes=False)
+@app_views.route('/api/v1/auth_session/login/', methods=['POST'], strict_slashes=False)
 def login():
-    """setting up checks for email and password"""
+    """setti/ng up checks for email and password"""
+    print("Login endpoint hit!")
     email = request.form.get('email')
     password = request.form.get('password')
 
