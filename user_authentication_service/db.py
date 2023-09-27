@@ -29,17 +29,11 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str,
-                 hashed_password: str) -> "<class 'user.User'>":
+    def add_user(self, email: str, hashed_password: str) -> User:
         """Method that saves a new user to the database"""
 
         new_user = User(email=email, hashed_password=hashed_password)
 
-        try:
-            self._session.add(new_user)
-            self._session.commit()
-            return new_user
-        except Exception as e:
-            self._session.rollback()
-            print(f"Error: {e}")
-            return None
+        self._session.add(new_user)
+        self._session.commit()
+        return new_user
