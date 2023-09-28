@@ -54,6 +54,15 @@ class Auth:
         except NoResultFound:
             return None
 
+    def destroy_session(self, user_id: int) -> None:
+        if not user_id:
+            return None
+
+        try:
+            self._db.update_user(user_id, session_id=None)
+        except NoResultFound:
+            return None
+
 
 def _generate_uuid() -> str:
     """Generates a string representation of a new UUID."""
