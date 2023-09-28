@@ -23,7 +23,7 @@ def root():
 def user():
     """Registers a new user.
 
-    The request must contain "email" and "password" fields. 
+    The request must contain "email" and "password" fields.
     If the user is already registered, a 400 error is returned.
 
     Returns:
@@ -47,7 +47,7 @@ def user():
 def login():
     """Logs in a user.
 
-    The request must contain "email" and "password" fields. 
+    The request must contain "email" and "password" fields.
     Upon successful login, a session cookie is set.
 
     Returns:
@@ -129,7 +129,8 @@ def update_password():
     The request must contain "email", "reset_token", and "new_password" fields.
 
     Returns:
-        JSON object with the user's email and a success message upon successful password update.
+        JSON object with the user's email
+        and a success message upon successful password update.
     """
     email = request.form.get("email")
     token = request.form.get("reset_token")
@@ -145,7 +146,7 @@ def update_password():
 if __name__ == "__main__":
     """Main execution of the Flask app when run as a script.
 
-    The app will run on all available network interfaces (0.0.0.0) 
+    The app will run on all available network interfaces (0.0.0.0)
     and will listen on port 5000 by default.
     """
     app.run(host="0.0.0.0", port="5000")
