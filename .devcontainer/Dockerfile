@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y \
     git
 
 # Set up Git config
-RUN git config --global user.email "" && \
-    git config --global user.name ""
+RUN git config --global user.email "evanrich2404@gmail.com" && \
+    git config --global user.name "evanrich2404"
 
 # add deadsnakes PPA (this is for python 3.7 on older ubuntu) and install python 3.7
 RUN add-apt-repository ppa:deadsnakes/ppa -y && \
