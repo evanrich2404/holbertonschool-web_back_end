@@ -1,6 +1,8 @@
 {
     "name": "Python 3",
-    "dockerFile": "Dockerfile",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
     "customizations": {
         "vscode": {
             "settings": {
