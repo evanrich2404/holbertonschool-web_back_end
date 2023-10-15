@@ -1,0 +1,33 @@
+services:
+  app: # Your application service
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - .:/workspace # Share your project into the container
+    ports:
+      - "5000:5000" # Expose the Flask development server
+
+  redis: # Your cache service (and kinda database)
+    image: redis:alpine # Using a minimal Redis image
+    command: ["redis-server", "--bind", "127.0.0.1"]
+    volumes:
+      - redis:/data # Persist data
+
+# Uncomment if using separate database
+# db: # Your database service (example if using separate database)
+#   image: postgres:13 # Using a PostgreSQL image
+#   environment:
+#     POSTGRES_DB: postgres
+#     POSTGRES_USER: postgres
+#     POSTGRES_PASSWORD: postgres
+#   volumes:
+#     - postgres:/var/lib/postgresql/data # Persist data
+#   ports:
+#     - "5432:5432" # Expose PostgreSQL port
+
+# volumes:
+#   postgres: # Your database volume (example if using separate database)
+
+volumes:
+  redis: # Docker will create a named volume for Redis

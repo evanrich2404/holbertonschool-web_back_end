@@ -26,9 +26,6 @@ RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1
 # Upgrade pip
 RUN python3 -m pip install --upgrade pip
 
-# Install redis-server
-RUN apt-get install -y redis-server
-
 # Install necessary python packages
 RUN python3 -m pip install \
     pycodestyle==2.5 \
@@ -41,10 +38,6 @@ RUN python3 -m pip install \
 
 # example venv
 # RUN python3 -m venv /path/to/new/virtual/environment
-
-# Setup redis server ip
-RUN sed -i "s/bind .*/bind 127.0.0.1/g" /etc/redis/redis.conf
-RUN service redis-server start
 
 # Expose any necessary ports
 EXPOSE 5000
