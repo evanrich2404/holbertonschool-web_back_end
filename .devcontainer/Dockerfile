@@ -26,6 +26,9 @@ RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1
 # Upgrade pip
 RUN python3 -m pip install --upgrade pip
 
+# Install redis server
+RUN apt-get install -y redis-server
+
 # Install necessary python packages
 RUN python3 -m pip install \
     pycodestyle==2.5 \
