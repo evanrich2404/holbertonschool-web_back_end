@@ -5,6 +5,11 @@ from typing import Union, Callable, Optional
 import functools
 
 
+ByteProcessor = Callable[[bytes], Union[str, int, bytes]]
+OptionalByteProcessor = Optional[ByteProcessor]
+ReturnValue = Union[str, int, bytes, None]
+
+
 def count_calls(method: Callable) -> Callable:
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
@@ -21,14 +26,14 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         random_key = str(uuid.uuid4())
         self._redis.set(random_key, data)
         return random_key
 
-    def get(self, key: str,
-            fn: Optional[Callable[[bytes],
-            Union[str, int, bytes]]] = None) -> Union[str, int, bytes, None]:
+    def get(self, key: str, fn: OptionalByteProcessor = None) -> ReturnValue:
+
         data = self._redis.get(key)
         if data is None:
             return None
