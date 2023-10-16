@@ -11,13 +11,16 @@ ReturnValue = Union[str, int, bytes, None]
 
 
 def count_calls(method: Callable) -> Callable:
+    """Count the number of times a method is called."""
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
         self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
+    """Store the history of inputs and outputs for a particular function."""
     @functools.wraps(method)
     def wrapper(self, *args):
         self._redis.rpush("{}:inputs".format(method.__qualname__), str(args))
@@ -26,7 +29,9 @@ def call_history(method: Callable) -> Callable:
         return output
     return wrapper
 
+
 def replay(method: Callable):
+    """Display the history of calls of a particular function."""
     r = redis.Redis()
     method_name = method.__qualname__
     count = r.get(method_name).decode("utf-8")
@@ -37,7 +42,9 @@ def replay(method: Callable):
         print("{}(*{}) -> {}".format(method_name, i.decode("utf-8"),
                                      o.decode("utf-8")))
 
+
 class Cache:
+    """Cache class"""
     def __init__(self):
         self._redis = redis.Redis()
         self._redis.flushdb()
