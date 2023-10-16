@@ -13,7 +13,7 @@ ReturnValue = Union[str, int, bytes, None]
 def count_calls(method: Callable) -> Callable:
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
-        key = f"calls:{method.__qualname__}"
+        key = "calls:{}".format(method.__qualname__)
 
         self._redis.incr(key)
 
