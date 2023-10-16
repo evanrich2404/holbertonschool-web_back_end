@@ -2,6 +2,23 @@
 import redis
 import uuid
 from typing import Union, Callable, Optional
+import functools
+
+ByteProcessor = Callable[[bytes], Union[str, int, bytes]]
+OptionalByteProcessor = Optional[ByteProcessor]
+ReturnValue = Union[str, int, bytes, None]
+
+
+def count_calls(method: Callable) -> Callable:
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        key = f"calls:{method.__qualname__}"
+
+        self._redis.incr(key)
+
+        return method(self, *args, **kwargs)
+    return wrapper
+
 
 class Cache:
     def __init__(self):
@@ -13,9 +30,7 @@ class Cache:
         self._redis.set(random_key, data)
         return random_key
 
-    def get(self, key: str,
-            fn: Optional[Callable[[bytes],
-            Union[str, int, bytes]]] = None) -> Union[str, int, bytes, None]:
+    def get(self, key: str, fn: OptionalByteProcessor = None) -> ReturnValue:
         data = self._redis.get(key)
         if data is None:
             return None
