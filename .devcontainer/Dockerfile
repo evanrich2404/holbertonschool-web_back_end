@@ -39,5 +39,11 @@ RUN python3 -m pip install \
 # example venv
 # RUN python3 -m venv /path/to/new/virtual/environment
 
+# Setup redis server ip
+RUN sed -i "s/bind .*/bind 127.0.0.1/g" /etc/redis/redis.conf
+
 # Expose any necessary ports
 EXPOSE 5000
+
+# Start the redis server
+RUN service redis-server start
