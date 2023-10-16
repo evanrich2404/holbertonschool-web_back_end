@@ -4,10 +4,6 @@ import uuid
 from typing import Union, Callable, Optional
 import functools
 
-ByteProcessor = Callable[[bytes], Union[str, int, bytes]]
-OptionalByteProcessor = Optional[ByteProcessor]
-ReturnValue = Union[str, int, bytes, None]
-
 
 def count_calls(method: Callable) -> Callable:
     @functools.wraps(method)
@@ -30,7 +26,9 @@ class Cache:
         self._redis.set(random_key, data)
         return random_key
 
-    def get(self, key: str, fn: OptionalByteProcessor = None) -> ReturnValue:
+    def get(self, key: str,
+            fn: Optional[Callable[[bytes],
+            Union[str, int, bytes]]] = None) -> Union[str, int, bytes, None]:
         data = self._redis.get(key)
         if data is None:
             return None
