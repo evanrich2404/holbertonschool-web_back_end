@@ -4,11 +4,11 @@
 
 WITH Longevity AS (
     SELECT
-        band_name AS "band_name",              -- Band name column
+        band_name,
         CASE
             WHEN split IS NOT NULL THEN split - formed
             ELSE YEAR(CURRENT_DATE) - formed  -- Using the current year if the band has not split
-        END AS "lifespan"                     -- Compute lifespan in years
+        END AS lifespan                       -- Compute lifespan in years
     FROM
         metal_bands                           -- Source table that has been imported
     WHERE
@@ -21,7 +21,10 @@ SELECT
 FROM
     Longevity
 ORDER BY
-    lifespan DESC;                           -- Ordering by lifespan in descending order
+    lifespan DESC,                           -- Ordering by lifespan in descending order
+    band_name ASC;                           -- and by band name in ascending order for deterministic results
+
+
 
 -- Notes:
 -- 1. This script assumes that the 'metal_bands' table has columns named 'band_name', 'formed', 'split', and 'main_style'.
