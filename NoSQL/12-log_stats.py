@@ -3,7 +3,7 @@
 from pymongo import MongoClient
 
 
-def log_stats(mongo_collection):
+def log_stats():
     """Provides some stats about Nginx logs stored in MongoDB"""
     client = MongoClient()
     db = client.logs
