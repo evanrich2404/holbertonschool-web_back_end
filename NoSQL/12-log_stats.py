@@ -2,7 +2,6 @@
 """Provides some stats about Nginx logs stored in MongoDB"""
 from pymongo import MongoClient
 
-
 def log_stats():
     """Provides some stats about Nginx logs stored in MongoDB"""
     client = MongoClient()
@@ -16,7 +15,6 @@ def log_stats():
               f"{logs.count_documents({'method': method})}")
     print(f"{logs.count_documents({'method': 'GET', 'path': '/status'})} \
 status check")
-
 
 if __name__ == "__main__":
     log_stats()
